@@ -6,8 +6,8 @@
 (def db {:classname "com.mysql.jdbc.Driver"
          :subprotocol "mysql"
          :subname "//localhost:3306/noirproj"
-         :user "*****"
-         :password "****"})
+         :user "****"
+         :password "*****"})
 
 
 (def posts (cql/table db :posts))

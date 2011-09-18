@@ -6,5 +6,5 @@
                            [mysql/mysql-connector-java "5.1.6"]
                            [clojureql "1.0.1"]
                            [noir "1.1.0"]]
-            :main noirproj.views.common)
+            :main noirproj.server)
 

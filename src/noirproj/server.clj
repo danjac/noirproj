@@ -1,15 +1,17 @@
 (ns noirproj.server
-  (:require [noir.server :as server]))
+  (:require [noir.server :as server]
+            [noir.session :as session]))
 
 (server/load-views "src/noirproj/views/")
 
 (defn authenticate [handler]
   "Looks up user ID in session, pulls data from DB into session"
     (fn [req]
-        ;(session/remove! :user)
-        ;(if-let [user-id (session/get :user-id)]
-        ;    (session/put! :user {:name "danjac"})) 
         (let [response (handler req)]
+          (session/remove! :user)
+          (if-let [user-id (session/get :user-id)]
+              (do
+                (session/put! :user {:name "danjac"}))) 
             response)))
 
 (server/add-middleware authenticate)
