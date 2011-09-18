@@ -1,6 +1,7 @@
 (ns noirproj.views.welcome
   (:require [noirproj.views.common :as common]
             [noirproj.db :as db]
+            [noirproj.utils :as utils]
             [noir.content.pages :as pages]
             [noir.response :as res]
             [noir.session :as session]
@@ -23,17 +24,8 @@
 (defn valid-login? [login]
     true)
 
-(defn logged-in? []
-    true)
-
-
-(defn login-required []
-    (when-not  (logged-in?)
-      res/redirect "/login"))
-
-
-(statuses/set-page! 404 
-  (common/layout [:p "Sorry, the page you are looking for cannot be found"]))
+;(statuses/set-page! 404 
+;  (common/layout [:p "Sorry, the page you are looking for cannot be found"]))
 
 (defpartial post-fields [{:keys [title author details]}]
     [:dl
@@ -79,7 +71,7 @@
 
 
 (pre-route [:any "/new"] {}
-           (when-not (logged-in?)
+           (when-not (utils/logged-in?)
              (res/redirect "/login")))
 
 (defpage "/new" {:as post}
@@ -127,9 +119,8 @@
          (do 
             (session/put! :user-id (:id user))
             (session/flash-put! (format "Welcome back, %s" (:name user)))
-            (res/redirect "/new"))
-            (session/flash-put! "Invalid login"))
+            (res/redirect "/")))))
 
-    (render "/login" login)))
+;   (render "/login" login))
      
           

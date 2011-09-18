@@ -3,18 +3,21 @@
         hiccup.core
         hiccup.page-helpers)
   (:require [noir.session :as session]
-            [noir.server :as server]))
-
-(defn -main [& m]
-  (let [mode (keyword (or (first m) :dev))
-        port (Integer. (get (System/getenv) "PORT" "8080"))]
-    (server/start port {:mode mode
-                        :ns 'noirproj})))
+            [noirproj.utils :as utils]))
 
 (defpartial render-flash []
         (if-let [flash-message (session/flash-get)]
             [:div.span-24.notice flash-message]))
 
+
+(defpartial user-links [user]
+    [:li "You are logged in as " [:b (:name user)]]
+    [:li (link-to "/logout" "Log out")])
+
+(defpartial navbar []
+  [:ul.span-24
+    (if-let [user (utils/get-user)]
+      (user-links user))])
 
 (defpartial layout [& content]
   (html5
@@ -24,6 +27,7 @@
     [:body
      [:div.container
         (render-flash)
+        (navbar)
         [:div.span-24 {:id "content"}
       content]]]))
 
